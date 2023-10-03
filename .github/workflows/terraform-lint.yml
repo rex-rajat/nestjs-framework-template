@@ -16,7 +16,7 @@ jobs:
     - name: Use Action
       uses: ./
     - name: Validate
-      cd terraform/
+      working-directory: terraform/
       run: tflint -v
 
   integration-versions:
