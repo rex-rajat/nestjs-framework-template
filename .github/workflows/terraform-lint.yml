@@ -19,9 +19,9 @@ jobs:
           - ubuntu-latest    
     
     steps:
-#    - uses: actions/checkout@v3
-#    - name: Use Action
-#      uses: ./
+    - uses: actions/checkout@v3
+    - name: Use Action
+      uses: ./
     - name: Validate
       run: tflint -v
 
