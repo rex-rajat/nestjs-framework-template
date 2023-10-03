@@ -1,0 +1,90 @@
+name: Terraform-lint
+
+on:
+  push:
+    branches: [ feature/terraform-setup ]
+  pull_request:
+    branches: [ feature/terraform-setup ]
+jobs:
+  build:
+    name: Build checks
+    runs-on: ubuntu-latest
+  
+  integration:
+    name: Integration test
+
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest    
+    
+    steps:
+#    - uses: actions/checkout@v3
+#    - name: Use Action
+#      uses: ./
+    - name: Validate
+      run: tflint -v
+
+  integration-versions:
+    name: 'Integration test (tflint_version: ${{ matrix.tflint_version }})'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        tflint_version: ['v0.24.1', latest]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Action
+      uses: ./
+      with:
+        tflint_version: ${{ matrix.tflint_version }}
+    - name: Validate
+      if: matrix.tflint_version != 'latest'
+      run: |-
+        version='${{ matrix.tflint_version }}'
+        tflint -v | grep ${version:1}
+    - name: Validate
+      if: matrix.tflint_version == 'latest'
+      run: tflint -v
+
+  integration-matchers:
+    name: 'Integration test (tflint_version: ${{ matrix.tflint_version }})'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        tflint_version: ['v0.26.0', latest]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Action
+      uses: ./
+      with:
+        tflint_version: ${{ matrix.tflint_version }}
+    - name: Run
+      run: tflint -f compact --force
+
+  integration-wrapper:
+    name: 'Integration test (tflint_version: ${{ matrix.tflint_version }})'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        tflint_version: [ 'v0.26.0', latest ]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Action
+        uses: ./
+        with:
+          tflint_version: ${{ matrix.tflint_version }}
+          tflint_wrapper: true
+      - name: Run
+        id: tflint
+        run: tflint -f compact --force
+      - name: Verify Exit Code Output
+        run: |
+          if [[ ${{ steps.tflint.outputs.exitcode }} -ne 0 ]]; then
+            echo "TFLint Exit Code not captured."
+            exit 1
+          else
+            echo "TFLint Exit Code captured."
+          fi
