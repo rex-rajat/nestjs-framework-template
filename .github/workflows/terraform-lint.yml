@@ -2,9 +2,9 @@ name: Terraform-lint
 
 on:
   push:
-    branches: [ feature/terraform-setup ]
+    branches: [ main , master]
   pull_request:
-    branches: [ feature/terraform-setup ]
+    branches: "*"
 
 jobs:
   validate:
