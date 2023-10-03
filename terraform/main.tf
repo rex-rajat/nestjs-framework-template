@@ -1,31 +1,31 @@
-provider "aws" {
-  region = "ap-south-1"  # Replace with your desired AWS region
-}
+//provider "aws" {
+// region = "ap-south-1"  # Replace with your desired AWS region
+//}
 
 terraform {
-  required_version = ">= 0.12"  # Specify the minimum required version here
+  required_version = ">= 0.12" # Specify the minimum required version here
 }
 
 
 # Create a VPC
 resource "aws_vpc" "dev_vpc" {
-  cidr_block = "10.0.0.0/16"
-  enable_dns_support = true
+  cidr_block           = "10.0.0.0/16"
+  enable_dns_support   = true
   enable_dns_hostnames = true
 }
 
 # Create a public subnet
 resource "aws_subnet" "public_subnet" {
-  vpc_id     = aws_vpc.dev_vpc.id
-  cidr_block = "10.0.1.0/24"
+  vpc_id            = aws_vpc.dev_vpc.id
+  cidr_block        = "10.0.1.0/24"
   availability_zone = "us-east-1a"
   #map_public_ip_on_launch = true  # Enable auto-assigning public IPs to instances
 }
 
 # Create a private subnet
 resource "aws_subnet" "private_subnet" {
-  vpc_id     = aws_vpc.dev_vpc.id
-  cidr_block = "10.0.2.0/24"
+  vpc_id            = aws_vpc.dev_vpc.id
+  cidr_block        = "10.0.2.0/24"
   availability_zone = "us-east-1b"
 }
 
