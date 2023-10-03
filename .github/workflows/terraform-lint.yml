@@ -29,5 +29,6 @@ jobs:
 
       - name: Validate Terraform Code
         run: |
+          pwd
           cd terraform/  # Change to your Terraform code directory
           tflint
