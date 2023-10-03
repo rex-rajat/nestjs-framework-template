@@ -1,3 +1,6 @@
+terraform {
+  required_version = ">= 0.12"  # Specify the minimum required version here
+}
 
 
 # Create a VPC
