@@ -1,14 +1,7 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 3.0"  # Specify the desired AWS provider version here
-    }
-  }
-}
+
 
 # Create a VPC
-resource "aws_vpc" "my_vpc" {
+resource "aws_vpc" "dev_vpc" {
   cidr_block = "10.0.0.0/16"
   enable_dns_support = true
   enable_dns_hostnames = true
@@ -16,7 +9,7 @@ resource "aws_vpc" "my_vpc" {
 
 # Create a public subnet
 resource "aws_subnet" "public_subnet" {
-  vpc_id     = aws_vpc.my_vpc.id
+  vpc_id     = aws_vpc.dev_vpc.id
   cidr_block = "10.0.1.0/24"
   availability_zone = "us-east-1a"
   #map_public_ip_on_launch = true  # Enable auto-assigning public IPs to instances
@@ -24,25 +17,25 @@ resource "aws_subnet" "public_subnet" {
 
 # Create a private subnet
 resource "aws_subnet" "private_subnet" {
-  vpc_id     = aws_vpc.my_vpc.id
+  vpc_id     = aws_vpc.dev_vpc.id
   cidr_block = "10.0.2.0/24"
   availability_zone = "us-east-1b"
 }
 
 # Create an internet gateway to enable communication with the internet
 resource "aws_internet_gateway" "my_igw" {
-  vpc_id = aws_vpc.my_vpc.id
+  vpc_id = aws_vpc.dev_vpc.id
 }
 
 # Attach the internet gateway to the VPC
-#resource "aws_vpc_attachment" "my_vpc_attachment" {
-#  vpc_id             = aws_vpc.my_vpc.id
+#resource "aws_vpc_attachment" "dev_vpc_attachment" {
+#  vpc_id             = aws_vpc.dev_vpc.id
 #  internet_gateway_id = aws_internet_gateway.my_igw.id
 #}
 
 # Create a route table for the public subnet
 resource "aws_route_table" "public_route_table" {
-  vpc_id = aws_vpc.my_vpc.id
+  vpc_id = aws_vpc.dev_vpc.id
 }
 
 # Create a default route to the internet via the internet gateway
@@ -60,7 +53,7 @@ resource "aws_route_table_association" "public_subnet_association" {
 
 # Create a route table for the private subnet
 resource "aws_route_table" "private_route_table" {
-  vpc_id = aws_vpc.my_vpc.id
+  vpc_id = aws_vpc.dev_vpc.id
 }
 
 # Associate the private subnet with the private route table
