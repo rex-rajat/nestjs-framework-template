@@ -29,6 +29,6 @@ jobs:
 
       - name: Validate Terraform Code
         run: |
-          pwd
-          cd terraform/  # Change to your Terraform code directory
+          cd /home/runner/work/nestjs-framework-template/nestjs-framework-template/terraform
+          ls -lrth  # Change to your Terraform code directory
           tflint
